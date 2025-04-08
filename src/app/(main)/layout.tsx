@@ -12,25 +12,25 @@ const font = Poppins({
 });
 
 export default function MainLayout({
-    
   children,
 }: {
   children: React.ReactNode;
 }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-    
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+  
   return (
+
     <html lang="en">
       <body className={`${font.className} antialiased`}>
         <Header toggleSidebar={toggleSidebar} />
         <div className="flex">
-            <Sidebar isSidebarOpen={isSidebarOpen} />
-            <main className="flex-1 ml-0 sm:ml-60 p-10 py-20 pl-8 bg-white min-h-screen">
-                {children}
-            </main>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+          <main className="flex-1 ml-0 sm:ml-60 p-10 py-20 pl-8 bg-white min-h-screen">
+            {children}
+          </main>
         </div>
       </body>
     </html>
