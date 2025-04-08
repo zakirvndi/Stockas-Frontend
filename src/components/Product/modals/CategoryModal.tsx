@@ -118,8 +118,8 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
                   onChange={(e) => setNewRow(e.target.value)}
                 />
                 <div className="flex gap-2 text-gray-500">
-                  <button onClick={handleSaveNew}><Check className="w-4 h-4" /></button>
-                  <button onClick={() => setNewRow(null)}><XCircle className="w-4 h-4" /></button>
+                  <button onClick={handleSaveNew}><Check className="w-4 h-4 cursor-pointer"/></button>
+                  <button onClick={() => setNewRow(null)}><XCircle className="w-4 h-4 cursor-pointer" /></button>
                 </div>
               </div>
             )}
