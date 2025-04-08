@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { X, PlusCircle, Trash2, Pencil, Check } from "lucide-react";
-import { Dialog } from "@headlessui/react";
+import { useEffect, useState } from 'react';
+import { Dialog } from '@headlessui/react';
+import { X, Trash2, Pencil, Check, PlusCircle, XCircle } from 'lucide-react';
 import {
   getCategories,
   createCategory,
   updateCategory,
   deleteCategory,
-} from "../../../app/services/categoryService";
-import { CategoryType } from "../../../app/types/product";
+} from '../../../app/services/categoryService';
+import { CategoryType } from '../../../app/types/product';
 
 interface Props {
   isOpen: boolean;
@@ -18,9 +18,10 @@ interface Props {
 
 export default function CategoryModal({ isOpen, onClose }: Props) {
   const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [newCategory, setNewCategory] = useState("");
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editingName, setEditingName] = useState("");
+  const [newRow, setNewRow] = useState<string | null>(null);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState<string>('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -37,110 +38,124 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
     setCategories(formatted);
   };
 
-  const handleAddCategory = async () => {
-    if (!newCategory.trim()) return;
-    const result = await createCategory({ name: newCategory });
-    setNewCategory("");
-    fetchCategories();
+  const handleAddRow = () => {
+    setNewRow('');
   };
 
-  const handleUpdateCategory = async (id: number) => {
-    if (!editingName.trim()) return;
-    await updateCategory(id.toString(), { name: editingName });
-    setEditingId(null);
-    setEditingName("");
-    fetchCategories();
+  const handleSaveNew = async () => {
+    if (!newRow?.trim()) return;
+    try {
+      await createCategory({ name: newRow });
+      setNewRow(null);
+      fetchCategories();
+    } catch (err: any) {
+      setError(err.message || 'Failed to create category');
+    }
   };
 
-  const handleDeleteCategory = async (id: number) => {
+  const handleEdit = (cat: CategoryType) => {
+    setEditId(cat.id);
+    setEditValue(cat.name);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editValue.trim()) return;
+    try {
+      await updateCategory(editId!.toString(), { name: editValue });
+      setEditId(null);
+      fetchCategories();
+    } catch (err: any) {
+      setError(err.message || 'Failed to update category');
+    }
+  };
+
+  const handleDelete = async (id: number) => {
     try {
       await deleteCategory(id.toString());
-      await fetchCategories(); 
-    } catch (error) {
-      console.error("Delete failed:", error);
+      fetchCategories();
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete category');
     }
+  };
+
+  const handleCancelEdit = () => {
+    setEditId(null);
+    setEditValue('');
   };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <Dialog.Panel className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl text-black">
           <div className="flex justify-between items-center mb-4">
-            <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-semibold text-black">Modify <span className="text-blue-600">Category</span></h1>
-            <p className="text-black text-xs">You can easily update category here</p>
+            <div>
+              <h1 className="text-xl font-semibold">
+                Modify <span className="text-blue-600">Category</span>
+              </h1>
+              <p className="text-xs text-black">You can easily update the category here!</p>
             </div>
             <button onClick={onClose}>
-              <X className="w-5 h-5 text-gray-600 cursor-pointer" />
+              <X className="w-5 h-5 text-gray-500 cursor-pointer" />
             </button>
           </div>
 
-          {/* Inline New Category */}
-          <div className="flex gap-2 mb-4 text-black">
-            <input
-              type="text"
-              placeholder="Add new category"
-              value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            <button
-              onClick={handleAddCategory}
-              className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 cursor-pointer"
-            >
+          <div className="flex justify-between items-center px-2 mb-2">
+            <span className="text-sm font-semibold text-gray-600">Category List</span>
+            <button onClick={handleAddRow} className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 cursor-pointer">
               <PlusCircle className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Category List */}
-          <div className="space-y-2 overflow-y-auto max-h-60">
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex items-center justify-between border-b border-gray-100 px-3 py-2 rounded-md"
-              >
-                {editingId === cat.id ? (
-                  <input
-                    value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleUpdateCategory(cat.id);
-                    }}
-                    className="flex-1 mr-2 border-1 rounded px-2 py-1 text-sm text-gray-500"
-                  />
-                ) : (
-                  <span className="text-sm text-gray-500">{cat.name}</span>
-                )}
-                <div className="flex gap-2">
-                  {editingId === cat.id ? (
-                    <button
-                      onClick={() => handleUpdateCategory(cat.id)}
-                      className="text-gray-500 cursor-pointer"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setEditingId(cat.id);
-                        setEditingName(cat.name);
-                      }}
-                      className="text-gray-500 cursor-pointer"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDeleteCategory(cat.id)}
-                    className="text-gray-500 cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+          <div className="space-y-2 max-h-60 overflow-y-auto">
+            {newRow !== null && (
+              <div className="flex justify-between items-center gap-2 px-2 py-1 bg-gray-50 rounded text-sm">
+                <input
+                  type="text"
+                  placeholder="New Category"
+                  className="border px-2 py-1 rounded w-full"
+                  value={newRow}
+                  onChange={(e) => setNewRow(e.target.value)}
+                />
+                <div className="flex gap-2 text-gray-500">
+                  <button onClick={handleSaveNew}><Check className="w-4 h-4" /></button>
+                  <button onClick={() => setNewRow(null)}><XCircle className="w-4 h-4" /></button>
                 </div>
+              </div>
+            )}
+
+            {categories.map((cat) => (
+              <div key={cat.id} className="flex items-center justify-between px-2 py-1 border-b border-gray-200 text-sm gap-2">
+                {editId === cat.id ? (
+                  <>
+                    <input
+                      className="border px-2 py-1 rounded w-full"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                    />
+                    <div className="flex gap-2 text-gray-500">
+                      <button onClick={handleSaveEdit}><Check className="w-4 h-4 cursor-pointer" /></button>
+                      <button onClick={handleCancelEdit}><XCircle className="w-4 h-4 cursor-pointer" /></button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="flex-1 text-gray-700">{cat.name}</p>
+                    <div className="flex gap-2 text-gray-500">
+                      <button onClick={() => handleEdit(cat)}><Pencil className="w-4 h-4" /></button>
+                      <button onClick={() => handleDelete(cat.id)}><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
+
+          {error && (
+            <div className="mt-4 text-sm text-red-500 bg-red-100 rounded px-3 py-2">
+              {error}
+            </div>
+          )}
         </Dialog.Panel>
       </div>
     </Dialog>

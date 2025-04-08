@@ -10,7 +10,7 @@ import AddProductModal from "@/components/Product/modals/AddProductModal";
 import EditProductModal from "@/components/Product/modals/EditProductModal";
 import { DeleteProductModal } from "@/components/Product/modals/DeleteProductModal";
 import UpdateStockModal from "@/components/Product/modals/UpdateStockModal";
-import CategoryModal from "@/components/Product/modals/categoryModal";
+import CategoryModal from "@/components/Product/modals/CategoryModal";
 
 export default function ProductPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -80,7 +80,7 @@ export default function ProductPage() {
         <h1 className="text-xl font-semibold text-black">Product <span className="text-blue-600">List</span></h1>
 
         {/*Search  Action Buttons */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 text-gray-500 text-xs font-medium">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 text-gray-500 text-xs font-medium border-b-2 border-gray-200 pb-4">
           <input
             type="text"
             placeholder="Enter Category or Product Name"
