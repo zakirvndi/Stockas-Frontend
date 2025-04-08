@@ -133,7 +133,7 @@ const LoginPage = () => {
             
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-left font-medium" htmlFor="login-email">Email</label>
+                <label className="block text-left font-medium text-sm text-[#051D63]" htmlFor="login-email">Email</label>
                 <input 
                   autoComplete="email"
                   type="email" 
@@ -141,7 +141,7 @@ const LoginPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full p-2 py-3 border rounded-md bg-white italic text-sm focus:outline-none text-left ${
+                  className={`w-full p-2 py-3 border rounded-md bg-white italic text-sm text-gray-500 focus:outline-none text-left ${
                     emailError ? 'border-red-500' : 'border-[#B4CCE4]'
                   }`}
                   required 
@@ -152,7 +152,7 @@ const LoginPage = () => {
               </div>
               
               <div className="mb-4">
-                <label className="block text-left font-medium" htmlFor="login-password">Password</label>
+                <label className="block text-left font-medium text-sm text-[#051D63]" htmlFor="login-password">Password</label>
                 <div className="relative">
                   <input 
                     autoComplete="current-password"
@@ -161,14 +161,14 @@ const LoginPage = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full p-2 border rounded-md bg-white italic text-sm focus:outline-none text-left ${
+                    className={`w-full p-2 border rounded-md bg-white italic text-sm focus:outline-none text-gray-500  text-left ${
                       passwordError ? 'border-red-500' : 'border-[#B4CCE4]'
                     }`}
                     required 
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
@@ -184,13 +184,13 @@ const LoginPage = () => {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full bg-blue-600 text-white py-2 rounded-3xl hover:bg-blue-700 transition font-semibold disabled:opacity-70"
+                className="w-full bg-blue-600 text-white py-2 rounded-3xl hover:bg-blue-700 transition font-semibold disabled:opacity-70 cursor-pointer"
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
 
-            <div className="mt-3 sm:mt-4 lg:mt-5 text-center">
+            <div className="mt-3 sm:mt-4 lg:mt-5 text-center text-gray-500">
               <p className="text-xs sm:text-sm mb-4 sm:mb-5 px-2">
                 By continuing, you are indicating that you have read and agree to the{' '}
                 <a href="#" className="text-[#0040FF] font-semibold">Terms of Use</a> and{' '}
@@ -218,7 +218,7 @@ const LoginPage = () => {
           
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-left font-medium" htmlFor="login-email-mobile">Email</label>
+              <label className="block text-left font-medium text-[#051D63] text-sm" htmlFor="login-email-mobile">Email</label>
               <input 
                 autoComplete="email"
                 type="email" 
@@ -237,7 +237,7 @@ const LoginPage = () => {
             </div>
             
             <div className="mb-4">
-              <label className="block text-left font-medium" htmlFor="login-password-mobile">Password</label>
+              <label className="block text-left font-medium text-[#051D63] text-sm" htmlFor="login-password-mobile">Password</label>
               <div className="relative">
                 <input 
                   autoComplete="current-password"
@@ -253,11 +253,11 @@ const LoginPage = () => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <BsEyeSlashFill className="w-5 h-5" /> : <IoEyeSharp className="w-5 h-5" />}
+                  {showPassword ? <BsEyeSlashFill className="w-5 h-5" /> : <IoEyeSharp className="w-5 h-5 " />}
                 </button>
               </div>
               {passwordError && (
@@ -269,13 +269,13 @@ const LoginPage = () => {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-2 rounded-3xl hover:bg-blue-700 transition font-semibold disabled:opacity-70"
+              className="w-full bg-blue-600 text-white py-2 rounded-3xl hover:bg-blue-700 transition font-semibold disabled:opacity-70  cursor-pointer"
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-3 sm:mt-4 lg:mt-5 text-center">
+          <div className="mt-3 sm:mt-4 lg:mt-5 text-center text-gray-500">
             <p className="text-xs sm:text-sm mb-4 sm:mb-5 px-2">
               By continuing, you are indicating that you have read and agree to the{' '}
               <a href="#" className="text-[#0040FF] font-semibold">Terms of Use</a> and{' '}

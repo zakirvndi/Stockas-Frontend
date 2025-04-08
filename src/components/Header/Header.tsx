@@ -53,7 +53,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   };
 
   return (
-    <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+    <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200'>
       <div className='px-5 py-4 lg:px-5 lg:pl-3'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center justify-start rtl:justify-end'>
@@ -82,7 +82,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
                     <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
                   </div>
                 ) : (
-                  <span className="hidden md:block font-medium">
+                  <span className="hidden md:block font-medium text-gray-700 text-sm">
                     {getFirstName(userProfile?.name)}
                   </span>
                 )}

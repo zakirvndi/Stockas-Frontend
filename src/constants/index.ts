@@ -20,12 +20,12 @@ export const mainLinks: NavLink[] = [
     text: "Dashboard",
   },
   {
-    href: "/transactions",
+    href: "/transaction",
     icon: PiNewspaperFill,
     text: "Transactions",
   },
   {
-    href: "/products",
+    href: "/product",
     icon: FaBoxArchive,
     text: "Products",
   },
