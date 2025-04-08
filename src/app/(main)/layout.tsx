@@ -28,7 +28,7 @@ export default function MainLayout({
         <Header toggleSidebar={toggleSidebar} />
         <div className="flex">
             <Sidebar isSidebarOpen={isSidebarOpen} />
-            <main className="flex-1 ml-0 sm:ml-60 p-5 mt-21 pl-8">
+            <main className="flex-1 ml-0 sm:ml-60 p-10 py-20 pl-8 bg-white min-h-screen">
                 {children}
             </main>
         </div>
