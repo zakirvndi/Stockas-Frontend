@@ -1,22 +1,24 @@
+import { getToken } from "@/utils/auth";
+
 const API = "https://stockas.azurewebsites.net"; 
 
 export const getCategories = async () => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/product-categories`, {
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
   return response.json();
 };
 
 export const createCategory = async (data: { name: string }) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/product-categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({ categoryName: data.name }),
   });
@@ -24,12 +26,12 @@ export const createCategory = async (data: { name: string }) => {
 };
 
 export const updateCategory = async (id: string, data: { name: string }) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/product-categories/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({ categoryName: data.name }), 
   });
@@ -37,11 +39,11 @@ export const updateCategory = async (id: string, data: { name: string }) => {
 };
 
 export const deleteCategory = async (id: string) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/product-categories/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
 

@@ -1,10 +1,12 @@
+import { getToken } from "@/utils/auth";
+
 const API = "https://stockas.azurewebsites.net";
 
 export const getProducts = async (params = "") => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/products${params}`, {
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
 
@@ -20,12 +22,12 @@ export const getProducts = async (params = "") => {
 };
 
 export const createProduct = async (productData: any) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/products`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify(productData),
   });
@@ -33,12 +35,12 @@ export const createProduct = async (productData: any) => {
 };
 
 export const updateProduct = async (id: number, updatedData: any) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/products/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify(updatedData),
   });
@@ -46,11 +48,11 @@ export const updateProduct = async (id: number, updatedData: any) => {
 };
 
 export const deleteProduct = async (id: number) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/products/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
   if (!response.ok) throw new Error("Failed to delete product");
@@ -58,13 +60,13 @@ export const deleteProduct = async (id: number) => {
 };
 
 export const updateStock = async (id: number, updatedProduct: any) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
 
   const response = await fetch(`${API}/api/products/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify(updatedProduct),
   });

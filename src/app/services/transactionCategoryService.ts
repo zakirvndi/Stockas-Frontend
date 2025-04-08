@@ -1,10 +1,12 @@
+import { getToken } from "@/utils/auth";
+
 const API = "https://stockas.azurewebsites.net";
 
 export const getTransactionCategories = async () => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transaction-categories`, {
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
   if (!response.ok) {
@@ -19,12 +21,12 @@ export const createTransactionCategory = async (data: {
   name: string;
   type: string;
 }) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transaction-categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({
       categoryName: data.name,
@@ -46,12 +48,12 @@ export const updateTransactionCategory = async (
     name: string,
     type: 'Income' | 'Expense'
 }) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transaction-categories/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({
       categoryName: data.name,
@@ -68,11 +70,11 @@ export const updateTransactionCategory = async (
 };
 
 export const deleteTransactionCategory = async (id: number) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transaction-categories/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
 

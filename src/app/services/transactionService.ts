@@ -1,10 +1,12 @@
+import { getToken } from "@/utils/auth";
+
 const API = "https://stockas.azurewebsites.net"; 
 
 export const getTransactions = async (page = 1, pageSize = 10) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transactions?page=${page}&pageSize=${pageSize}`, {
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
 
@@ -22,12 +24,12 @@ export const createTransaction = async (data: {
   description: string;
   productId?: number; 
 }) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transactions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify(data),
   });
@@ -41,12 +43,12 @@ export const createTransaction = async (data: {
 };
 
 export const updateTransaction = async (id: number, data: any) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transactions/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify(data),
   });
@@ -60,11 +62,11 @@ export const updateTransaction = async (id: number, data: any) => {
 };
 
 export const deleteTransaction = async (id: number) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const response = await fetch(`${API}/api/transactions/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: token || "",
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
 

@@ -22,9 +22,7 @@ export default function MainLayout({
   };
   
   return (
-
-    <html lang="en">
-      <body className={`${font.className} antialiased`}>
+    <div className={`${font.className} antialiased`}>
         <Header toggleSidebar={toggleSidebar} />
         <div className="flex">
           <Sidebar isSidebarOpen={isSidebarOpen} />
@@ -32,7 +30,6 @@ export default function MainLayout({
             {children}
           </main>
         </div>
-      </body>
-    </html>
+    </div>
   );
 }
