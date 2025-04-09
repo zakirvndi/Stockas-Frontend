@@ -26,10 +26,8 @@ interface Props {
 export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
   const [categories, setCategories] = useState<TransactionCategoryType[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const [error, setError] = useState('');
   const [newRow, setNewRow] = useState<{ name: string; type: 'Income' | 'Expense' } | null>(null);
   const [editData, setEditData] = useState<{ name: string; type: 'Income' | 'Expense' }>({ name: '', type: 'Expense' });
-
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -55,9 +53,9 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
       fetchCategories();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Failed to ...');
+        setErrorMessage(err.message || 'Failed to ...');
       } else {
-        setError('Failed to ...');
+        setErrorMessage('Failed to ...');
       }
     }
   };
@@ -68,9 +66,9 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
       fetchCategories();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Failed to ...');
+        setErrorMessage(err.message || 'Failed to ...');
       } else {
-        setError('Failed to ...');
+        setErrorMessage('Failed to ...');
       }
     }
   };
@@ -88,9 +86,9 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
       fetchCategories();
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Failed to ...');
+        setErrorMessage(err.message || 'Failed to ...');
       } else {
-        setError('Failed to ...');
+        setErrorMessage('Failed to ...');
       }
     }
   };
