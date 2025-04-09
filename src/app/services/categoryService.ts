@@ -4,12 +4,24 @@ const API = "https://stockas.azurewebsites.net";
 
 export const getCategories = async () => {
   const token = getToken();
-  const response = await fetch(`${API}/api/product-categories`, {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : '',
-    },
-  });
-  return response.json();
+
+  try {
+    const response = await fetch(`${API}/api/product-categories`, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch categories: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching product categories:", error);
+    return [];
+  }
 };
 
 export const createCategory = async (data: { name: string }) => {
