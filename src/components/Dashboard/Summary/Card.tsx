@@ -32,7 +32,7 @@ type CardProps = {
     const { icon, title, bgColor, iconColor } = config[type];
   
     return (
-      <div className='bg-white p-4 rounded-xl border shadow-sm w-full'>
+      <div className='bg-white p-4 rounded-xl shadow-sm w-full'>
         <div className='flex items-center gap-4'>
           <span className={`${bgColor} ${iconColor} p-3 text-xl rounded-full`}>
             {icon}
