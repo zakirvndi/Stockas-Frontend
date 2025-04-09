@@ -1,5 +1,5 @@
 import { getToken } from '@/utils/auth';
-import { deleteCookie, getCookie, setCookie } from '@/utils/cookies';
+import { deleteCookie, getCookie } from '@/utils/cookies';
 
 const API_BASE_URL = 'https://stockas.azurewebsites.net/api';
 
@@ -84,57 +84,6 @@ export async function logoutUser(): Promise<{ success: boolean }> {
     return { success: false };
   }
 }
-
-export async function fetchProtectedData() {
-  const token = getCookie('token');
-  if (!token) throw new Error('No token found');
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/protected-route`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        const refreshToken = getCookie('refreshToken');
-        if (!refreshToken) {
-          throw new Error('Session expired');
-        }
-
-        const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            accessToken: token,
-            refreshToken: refreshToken
-          }),
-        });
-
-        if (!refreshResponse.ok) {
-          throw new Error('Session expired');
-        }
-
-        const newTokens = await refreshResponse.json();
-        setCookie('token', newTokens.token, 1);
-        setCookie('refreshToken', newTokens.refreshToken, 7);
-        
-        return fetchProtectedData();
-      }
-      throw new Error('Request failed');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch protected data error:', error);
-    throw error;
-  }
-}
-
 
 interface UserProfile {
   name: string;
