@@ -27,22 +27,19 @@ export default function TransactionPage() {
 
   const fetchTransactions = async () => {
     try {
-      const response = await getTransactions(currentPage, pageSize);
-      
-      // Ensure we have valid data before sorting
-      if (!Array.isArray(response)) {
-        console.error('Invalid transactions data:', response);
-        setTransactions([]);
-        return;
-      }
-  
-      // Sort only if we have items
-      const sorted = [...response].sort((a, b) => 
-        (a.transactionId || 0) - (b.transactionId || 0)
-      );
-  
-      setTransactions(sorted);
-      setTotalPages(Math.ceil((response.length || 0) / pageSize));
+      const { items, totalCount } = await getTransactions(currentPage, pageSize);
+    
+    if (!Array.isArray(items)) {
+      console.error('Invalid transactions data:', items);
+      setTransactions([]);
+      return;
+    }
+
+    const sorted = [...items].sort((a, b) => 
+      (a.transactionId || 0) - (b.transactionId || 0)
+    );
+    setTransactions(sorted);
+    setTotalPages(Math.ceil((totalCount || 0) / pageSize));
     } catch (err) {
       console.error("Error fetching transactions:", err);
       setTransactions([]);
@@ -128,7 +125,7 @@ export default function TransactionPage() {
         <div className="flex justify-end mt-auto p-4 gap-2 border-t border-gray-200 text-gray-500 text-xs">
           <button
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             className="px-3 py-1 text-black bg-white border border-gray-200 rounded disabled:opacity-50 cursor-pointer"
           >
             Previous
@@ -137,8 +134,8 @@ export default function TransactionPage() {
             Page {currentPage} of {totalPages}
           </span>
           <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage >= totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             className="px-3 py-1 text-black bg-white border border-gray-200 rounded disabled:opacity-50 cursor-pointer"
           >
             Next

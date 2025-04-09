@@ -15,7 +15,10 @@ export const getTransactions = async (page = 1, pageSize = 10) => {
     throw new Error(JSON.stringify(data));
   }
 
-  return Array.isArray(data) ? data : (data.items || []);
+  return {
+    items: data.items || [],
+    totalCount: data.totalCount || 0
+  };
 }; 
 
 export const createTransaction = async (data: {
