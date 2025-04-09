@@ -6,6 +6,7 @@ import { createTransactionCategory, getTransactionCategories } from '@/app/servi
 import { updateStock } from '@/app/services/productService';
 import toast from 'react-hot-toast';
 import { X } from "lucide-react";
+import { TransactionCategoryType } from '@/app/types/transaction';
 
 type UpdateStockModalProps = {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export default function UpdateStockModal({
         
         const existingCategories = await getTransactionCategories();
         const found = existingCategories.find(
-          (c: any) => c.categoryName === category.name
+          (c: TransactionCategoryType) => c.categoryName === category.name
         );
     
         if (!found) {
@@ -60,8 +61,7 @@ export default function UpdateStockModal({
             type: category.type,
           });
         }
-        
-        //payload disini untuk format transaksi yg diinginkan
+
         console.log("Payload to transaction", payload);
         await createTransaction(payload);
         
@@ -75,17 +75,22 @@ export default function UpdateStockModal({
           productName: product.name,
           categoryId: product.categoryId,
           quantity: newStock,
-          buyingPrice: product.buyingPrice,
+          purchasePrice: product.buyingPrice,
           sellingPrice: product.sellingPrice,
         });
     
         toast.success('Stock berhasil diupdate!');
         onClose();
         onSuccess();
-      } catch (err: any) {
-        console.error('Gagal update stock:', err);
-        toast.error(err?.message || 'Gagal update stock');
-      } finally {
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error('Gagal update stock:', err);
+          toast.error(err.message || 'Gagal update stock');
+        } else {
+          console.error('Unknown error:', err);
+          toast.error('Gagal update stock');
+        }
+      }finally {
         setIsSubmitting(false);
       }
     };

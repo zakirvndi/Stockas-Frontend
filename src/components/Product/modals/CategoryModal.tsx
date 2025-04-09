@@ -31,11 +31,7 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
 
   const fetchCategories = async () => {
     const data = await getCategories();
-    const formatted = data.map((item: any) => ({
-      id: item.categoryId,
-      name: item.categoryName,
-    }));
-    setCategories(formatted);
+    setCategories(data); 
   };
 
   const handleAddRow = () => {
@@ -48,14 +44,18 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
       await createCategory({ name: newRow });
       setNewRow(null);
       fetchCategories();
-    } catch (err: any) {
-      setError(err.message || 'Failed to create category');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 
   const handleEdit = (cat: CategoryType) => {
-    setEditId(cat.id);
-    setEditValue(cat.name);
+    setEditId(cat.categoryId);
+    setEditValue(cat.categoryName);
   };
 
   const handleSaveEdit = async () => {
@@ -64,8 +64,12 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
       await updateCategory(editId!.toString(), { name: editValue });
       setEditId(null);
       fetchCategories();
-    } catch (err: any) {
-      setError(err.message || 'Failed to update category');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 
@@ -73,8 +77,12 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
     try {
       await deleteCategory(id.toString());
       fetchCategories();
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete category');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 
@@ -118,15 +126,15 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
                   onChange={(e) => setNewRow(e.target.value)}
                 />
                 <div className="flex gap-2 text-gray-500">
-                  <button onClick={handleSaveNew}><Check className="w-4 h-4" /></button>
-                  <button onClick={() => setNewRow(null)}><XCircle className="w-4 h-4" /></button>
+                  <button onClick={handleSaveNew}><Check className="w-4 h-4 cursor-pointer"  /></button>
+                  <button onClick={() => setNewRow(null)}><XCircle className="w-4 h-4 cursor-pointer" /></button>
                 </div>
               </div>
             )}
 
             {categories.map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between px-2 py-1 border-b border-gray-200 text-sm gap-2">
-                {editId === cat.id ? (
+              <div key={cat.categoryId} className="flex items-center justify-between px-2 py-1 border-b border-gray-200 text-sm gap-2">
+                {editId === cat.categoryId ? (
                   <>
                     <input
                       className="border px-2 py-1 rounded w-full"
@@ -140,10 +148,10 @@ export default function CategoryModal({ isOpen, onClose }: Props) {
                   </>
                 ) : (
                   <>
-                    <p className="flex-1 text-gray-700">{cat.name}</p>
+                    <p className="flex-1 text-gray-700">{cat.categoryName}</p>
                     <div className="flex gap-2 text-gray-500">
-                      <button onClick={() => handleEdit(cat)}><Pencil className="w-4 h-4" /></button>
-                      <button onClick={() => handleDelete(cat.id)}><Trash2 className="w-4 h-4" /></button>
+                      <button onClick={() => handleEdit(cat)}><Pencil className="w-4 h-4 cursor-pointer" /></button>
+                      <button onClick={() => handleDelete(cat.categoryId)}><Trash2 className="w-4 h-4 cursor-pointer" /></button>
                     </div>
                   </>
                 )}

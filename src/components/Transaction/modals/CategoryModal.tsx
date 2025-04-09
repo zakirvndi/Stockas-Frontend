@@ -26,6 +26,7 @@ interface Props {
 export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
   const [categories, setCategories] = useState<TransactionCategoryType[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
+  const [error, setError] = useState('');
   const [newRow, setNewRow] = useState<{ name: string; type: 'Income' | 'Expense' } | null>(null);
   const [editData, setEditData] = useState<{ name: string; type: 'Income' | 'Expense' }>({ name: '', type: 'Expense' });
 
@@ -39,12 +40,7 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
 
   const fetchCategories = async () => {
     const data = await getTransactionCategories();
-    const formatted: TransactionCategoryType[] = data.map((item: any) => ({
-      categoryId: item.categoryId,
-      categoryName: item.categoryName,
-      type: item.type,
-    }));
-    setCategories(formatted);
+        setCategories(data); 
   };
 
   const handleAddRow = () => {
@@ -57,8 +53,12 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
       await createTransactionCategory(newRow);
       setNewRow(null);
       fetchCategories();
-    } catch (err: any) {
-      setErrorMessage(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 
@@ -66,8 +66,12 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
     try {
       await deleteTransactionCategory(id);
       fetchCategories();
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to delete category');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 
@@ -82,8 +86,12 @@ export default function TransactionCategoryModal({ isOpen, onClose }: Props) {
       await updateTransactionCategory(editId!, { name: editData.name, type: editData.type });
       setEditId(null);
       fetchCategories();
-    } catch (err: any) {
-      setErrorMessage(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Failed to ...');
+      } else {
+        setError('Failed to ...');
+      }
     }
   };
 

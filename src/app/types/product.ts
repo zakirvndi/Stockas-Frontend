@@ -10,9 +10,9 @@ export type ProductType = {
 };
   
 export type CategoryType = {
-    id: number;
-    name: string;
-  };
+  categoryId: number;
+  categoryName: string;
+};
 
   export type ProductAPIItem = {
     productId: number;
@@ -28,4 +28,31 @@ export type CategoryType = {
   export type ProductAPIResponse = {
     items: ProductAPIItem[];
     totalCount: number;
+  };
+
+  export type ProductInput = {
+    productName: string;
+    purchasePrice: number;
+    sellingPrice: number;
+    quantity: number;
+    categoryId: number;
+    inputDate: string;
+  };
+
+  export type ProductUpdate = {
+    productId: number;
+    productName: string;
+    purchasePrice: number;
+    sellingPrice: number;
+    quantity: number;
+    categoryId: number;
+  };
+
+  export type UpdateStock = {
+    productId: number;
+    productName: string;
+    purchasePrice: number;
+    sellingPrice: number;
+    quantity: number;
+    categoryId: number;
   };

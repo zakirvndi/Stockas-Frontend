@@ -78,7 +78,7 @@ export default function TransactionPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 text-gray-500 text-xs font-medium border-b-2 border-gray-200 pb-4">
             <input
               type="text"
-              placeholder="Enter Category or Product Name"
+              placeholder="Enter Category Name"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 "

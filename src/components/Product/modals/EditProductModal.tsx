@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ProductType } from "@/app/types/product";
+import { ProductType, ProductUpdate } from "@/app/types/product";
 import { updateProduct } from "@/app/services/productService";
 import { getCategories } from "@/app/services/categoryService";
 import { CategoryType } from "@/app/types/product";
@@ -39,14 +39,15 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 
   
     useEffect(() => {
-        const fetchCategories = async () => {
-            const data = await getCategories();
-            const formatted = data.map((item: any) => ({
-            id: item.categoryId,
-            name: item.categoryName,
-            }));
-            setCategories(formatted);
-        };
+      const fetchCategories = async () => {
+        try {
+          const result: CategoryType[] = await getCategories();
+          setCategories(result);
+          if (result.length > 0) setCategoryId(result[0].categoryId);
+        } catch (error) {
+          console.error("Failed to fetch categories", error);
+        }
+      };
 
     if (isOpen) {
       fetchCategories();
@@ -57,16 +58,16 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     e.preventDefault();
     if (!product) return;
 
-        const updatedProduct = {
-            productId: product.id,
-            productName: name,
-            categoryId: categoryId!,
-            quantity: stock,
-            sellingPrice,
-            purchasePrice: buyingPrice,
+        const updatedProduct: ProductUpdate = {
+          productId: product.id,
+          productName: name,
+          categoryId: categoryId!,
+          quantity: stock,
+          sellingPrice,
+          purchasePrice: buyingPrice,
         };
 
-        if (!categoryId || !categories.some(cat => cat.id === categoryId)) {
+        if (!categoryId || !categories.some(cat => cat.categoryId === categoryId)) {
             setCategoryError("Please reselect a valid category.");
             return;
         } else {
@@ -116,16 +117,16 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
               />
             </div>
 
-            <div>
-                <label className="text-sm font-medium text-black">Category *</label>
+            <div className="space-y-1">
+                <label className="block">Category *</label>
                 <select
                     value={categoryId ?? ""}
                     onChange={(e) => {
                     setCategoryId(Number(e.target.value));
-                    setCategoryError(""); // clear error saat user ubah
+                    setCategoryError(""); 
                     }}
                     required
-                    className={`w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 ${
                     categoryError
                         ? "border-red-300 focus:ring-red-300"
                         : "border-gray-300 focus:ring-blue-500"
@@ -133,8 +134,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 >
                     <option value="" disabled>Select a category</option>
                     {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                        {cat.name}
+                    <option key={cat.categoryId} value={cat.categoryId}>
+                        {cat.categoryName}
                     </option>
                     ))}
                 </select>

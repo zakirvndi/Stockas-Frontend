@@ -12,3 +12,9 @@ export type TransactionCategoryType = {
     categoryName: string;
     type: 'Income' | 'Expense'; 
 };
+
+export type TransactionInput = {
+    categoryName: string;
+    amount: number;
+    description?: string;
+  };

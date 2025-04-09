@@ -1,4 +1,5 @@
 import { getToken } from "@/utils/auth";
+import { TransactionInput } from "../types/transaction";
 
 const API = "https://stockas.azurewebsites.net"; 
 
@@ -32,12 +33,7 @@ export const getTransactions = async (
   };
 };
 
-export const createTransaction = async (data: {
-  categoryName: string;
-  amount: number;
-  description: string;
-  productId?: number; 
-}) => {
+export const createTransaction = async (data: TransactionInput & { productId?: number }) => {
   const token = getToken();
   const response = await fetch(`${API}/api/transactions`, {
     method: "POST",
@@ -56,7 +52,7 @@ export const createTransaction = async (data: {
   return await response.json();
 };
 
-export const updateTransaction = async (id: number, data: any) => {
+export const updateTransaction = async (id: number, data: TransactionInput) => {
   const token = getToken();
   const response = await fetch(`${API}/api/transactions/${id}`, {
     method: "PUT",

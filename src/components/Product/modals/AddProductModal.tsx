@@ -20,15 +20,13 @@ export default function AddProductModal({ isOpen, onClose, onSuccess }: AddProdu
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
   const fetchCategories = async () => {
-    const result = await getCategories();
-  
-    const mapped = result.map((cat: any) => ({
-      id: cat.categoryId,
-      name: cat.categoryName,
-    }));
-  
-    setCategories(mapped);
-    if (mapped.length > 0) setCategoryId(mapped[0].id);
+    try {
+      const result: CategoryType[] = await getCategories();
+      setCategories(result);
+      if (result.length > 0) setCategoryId(result[0].categoryId);
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+    }
   };
 
   useEffect(() => {
@@ -97,8 +95,8 @@ export default function AddProductModal({ isOpen, onClose, onSuccess }: AddProdu
                 className="w-full border border-gray-200 rounded px-3 py-2 text-gray-500"
               >
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
+                  <option key={cat.categoryId} value={cat.categoryId}>
+                    {cat.categoryName}
                   </option>
                 ))}
               </select>

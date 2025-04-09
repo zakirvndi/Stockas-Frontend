@@ -3,7 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { updateTransaction } from "@/app/services/transactionService";
 import { getTransactionCategories } from "@/app/services/transactionCategoryService";
-import { TransactionType } from "@/app/types/transaction";
+import { TransactionCategoryType, TransactionType } from "@/app/types/transaction";
 
 interface EditTransactionModalProps {
   isOpen: boolean;
@@ -34,10 +34,10 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   useEffect(() => {
     const fetchCategories = async () => {
       const data = await getTransactionCategories();
-      const formatted = data.map((item: any) => item.categoryName);
+      const formatted = data.map((item: TransactionCategoryType) => item.categoryName);
       setCategories(formatted);
     };
-
+  
     if (isOpen) fetchCategories();
   }, [isOpen]);
 
