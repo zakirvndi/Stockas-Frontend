@@ -15,8 +15,8 @@ export const getTransactions = async (page = 1, pageSize = 10) => {
     throw new Error(JSON.stringify(data));
   }
 
-  return data; 
-};
+  return Array.isArray(data) ? data : (data.items || []);
+}; 
 
 export const createTransaction = async (data: {
   categoryName: string;

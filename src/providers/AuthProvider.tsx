@@ -41,8 +41,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   if (!isAuthChecked && 
     (pathname.startsWith('/dashboard') || 
-     pathname.startsWith('/transactions') || 
-     pathname.startsWith('/products'))
+     pathname.startsWith('/transaction') || 
+     pathname.startsWith('/product'))
   ) {
     return null;
   }

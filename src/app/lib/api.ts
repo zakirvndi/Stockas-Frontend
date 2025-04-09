@@ -1,3 +1,4 @@
+import { getToken } from '@/utils/auth';
 import { deleteCookie, getCookie, setCookie } from '@/utils/cookies';
 
 const API_BASE_URL = 'https://stockas.azurewebsites.net/api';
@@ -174,6 +175,46 @@ export async function fetchUserProfile(retries = 3): Promise<UserProfile> {
       await new Promise(resolve => setTimeout(resolve, 1000));
       return fetchUserProfile(retries - 1);
     }
+    throw error;
+  }
+}
+
+export interface Transaction {
+  transactionId: number;
+  transactionDate: string;
+  categoryName: string;
+  type: 'Income' | 'Expense';
+  amount: number;
+  description?: string;
+}
+
+export async function fetchTransactions(): Promise<Transaction[]> {
+  const token = getToken();
+  
+  if (!token) {
+    console.error('No authentication token found');
+    throw new Error('Authentication required');
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/transactions`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('Session expired - please login again');
+      }
+      throw new Error('Failed to fetch transactions');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
     throw error;
   }
 }
