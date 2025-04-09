@@ -147,7 +147,7 @@ const RegisterPage = () => {
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm ${
+              className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm text-gray-500 ${
                 nameError ? 'border-red-500 border-2' : 'border-[#B4CCE4] border-2'
               }`}
               required
@@ -163,7 +163,7 @@ const RegisterPage = () => {
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm ${
+              className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm text-gray-500 ${
                 emailError ? 'border-red-500 border-2' : 'border-[#B4CCE4] border-2'
               }`}
               required
@@ -180,7 +180,7 @@ const RegisterPage = () => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm ${
+                className={`w-full px-4 py-3 rounded-md bg-white focus:outline-none text-sm text-gray-500 ${
                   passwordError ? 'border-red-500 border-2' : 'border-[#B4CCE4] border-2'
                 }`}
                 required
@@ -219,7 +219,7 @@ const RegisterPage = () => {
           </button>
         </form>
 
-        <div className="mt-3 sm:mt-4 lg:mt-5 text-center">
+        <div className="mt-3 sm:mt-4 lg:mt-5 text-center text-gray-500">
           <p className="text-xs sm:text-sm mb-4 sm:mb-5 px-2">
             By continuing, you are indicating that you have read and agree to the{' '}
             <a href="#" className="text-[#0040FF] font-semibold">Terms of Use</a> and{' '}
