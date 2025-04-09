@@ -6,6 +6,7 @@ import { TransactionType } from '../../types/transaction';
 import { getTransactions } from '../../services/transactionService';
 import Summary from '@/components/Dashboard/Summary/Summary';
 import CategoryChart from '@/components/Dashboard/Statistics/CategoryChart';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const fetcher = async (): Promise<TransactionType[]> => {
   const { items } = await getTransactions(1, 1000);
@@ -39,12 +40,14 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col gap-6 p-4 md:p-6 text-black">
+    <ProtectedRoute>
+      <div className="flex-1 flex flex-col gap-6 p-4 md:p-6 text-black">
       <h1 className='text-2xl font-bold'>Dashboard</h1>
       <Summary transactions={transactions} />
       <div className="grid grid-cols-1 gap-6">
         <CategoryChart transactions={transactions} />
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

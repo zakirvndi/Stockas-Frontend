@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerUser } from '@/app/lib/api';
 import { toast } from 'react-toastify';
-import { setAuthTokens, isAuthenticated } from '@/utils/auth';
+import { isAuthenticated } from '@/utils/auth';
 import { BsEyeSlashFill } from 'react-icons/bs';
 import { IoEyeSharp } from 'react-icons/io5';
 
@@ -25,7 +25,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      router.push('/dashboard');
+      router.push('/login');
     }
   }, [router]);
 
@@ -92,18 +92,13 @@ const RegisterPage = () => {
     setIsLoading(true);
   
     try {
-      const data = await registerUser(formData);
-      setAuthTokens(data.token, data.refreshToken);
-
-      sessionStorage.setItem('tempUserName', formData.name);
-      sessionStorage.setItem('tempUserEmail', formData.email);
-
-      window.location.href = '/dashboard';
+      await registerUser(formData);
+      window.location.href = '/login';
     } catch (err) {
       let errorMessage = 'Registration failed';
       if (err instanceof Error) {
-        errorMessage = err.message.includes('Email sudah terdaftar') 
-          ? 'Email sudah terdaftar. Silakan gunakan email lain.'
+        errorMessage = err.message.includes('Email already exist') 
+          ? 'Email already exixts. Please use another email.'
           : err.message;
       }
       setError(errorMessage);

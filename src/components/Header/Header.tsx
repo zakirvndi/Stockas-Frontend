@@ -16,14 +16,6 @@ type HeaderProps = {
 
 const Header = ({ toggleSidebar }: HeaderProps) => {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(() => {
-
-      const tempName = sessionStorage.getItem('tempUserName');
-      const tempEmail = sessionStorage.getItem('tempUserEmail');
-      if (tempName) {
-        sessionStorage.removeItem('tempUserName');
-        sessionStorage.removeItem('tempUserEmail');
-        return { name: tempName, email: tempEmail || '' };
-      }
       return null;
     });
   
