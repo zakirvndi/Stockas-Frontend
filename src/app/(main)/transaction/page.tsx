@@ -11,7 +11,7 @@ import EditTransactionModal from "@/components/Transaction/modals/EditTransactio
 import { DeleteTransactionModal } from "@/components/Transaction/modals/DeleteTransactionModal";
 import CategoryModal from "@/components/Transaction/modals/CategoryModal";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import FilterModal from "@/components/Product/modals/FilterModal";
+import FilterModal from "@/components/Transaction/modals/FilterModal";
 
 export default function TransactionPage() {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
@@ -24,8 +24,8 @@ export default function TransactionPage() {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [filter, setFilter] = useState({
     groupBy: "",
-    orderBy: "",
-    orderDesc: false,
+    sortBy: "",
+    sortDesc: false,
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -38,8 +38,8 @@ export default function TransactionPage() {
       params.append("pageSize", pageSize.toString());
   
       if (filter.groupBy) params.append("groupBy", filter.groupBy);
-      if (filter.orderBy) params.append("sortBy", filter.orderBy);
-      if (filter.orderDesc) params.append("sortDesc", "true");
+      if (filter.sortBy) params.append("sortBy", filter.sortBy);
+      if (filter.sortDesc) params.append("sortDesc", "true");
   
       const { items, totalCount } = await getTransactions("?" + params.toString());
   
@@ -189,11 +189,11 @@ export default function TransactionPage() {
         )} 
 
         <FilterModal
-                  isOpen={isFilterOpen}
-                  onClose={() => setFilterOpen(false)}
-                  filter={filter}
-                  setFilter={setFilter}
-                />
+          isOpen={isFilterOpen}
+          onClose={() => setFilterOpen(false)}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </div>
     </ProtectedRoute>
   );
