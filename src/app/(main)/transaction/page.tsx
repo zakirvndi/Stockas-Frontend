@@ -27,22 +27,13 @@ export default function TransactionPage() {
 
   const fetchTransactions = async () => {
     try {
-      const response = await getTransactions(currentPage, pageSize);
-      
-      // Ensure we have valid data before sorting
-      if (!Array.isArray(response)) {
-        console.error('Invalid transactions data:', response);
-        setTransactions([]);
-        return;
-      }
+      const { items, totalCount } = await getTransactions(currentPage, pageSize);
   
-      // Sort only if we have items
-      const sorted = [...response].sort((a, b) => 
-        (a.transactionId || 0) - (b.transactionId || 0)
-      );
-  
+      const sorted = items.sort((a :TransactionType, b:TransactionType) => (a.transactionId || 0) - (b.transactionId || 0));
       setTransactions(sorted);
-      setTotalPages(Math.ceil((response.length || 0) / pageSize));
+  
+      const total = Math.ceil(totalCount / pageSize);
+      setTotalPages(total);
     } catch (err) {
       console.error("Error fetching transactions:", err);
       setTransactions([]);

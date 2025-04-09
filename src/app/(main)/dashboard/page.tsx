@@ -8,12 +8,8 @@ import Summary from '@/components/Dashboard/Summary/Summary';
 import CategoryChart from '@/components/Dashboard/Statistics/CategoryChart';
 
 const fetcher = async (): Promise<TransactionType[]> => {
-  const transactions = await getTransactions(1, 1000);
-  if (!Array.isArray(transactions)) {
-    console.error('Invalid transactions data received:', transactions);
-    return [];
-  }
-  return transactions;
+  const { items } = await getTransactions(1, 1000);
+  return items;
 };
 
 export default function DashboardPage() {

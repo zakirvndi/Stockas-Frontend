@@ -23,9 +23,10 @@ const LinkItem = ({ href, icon: Icon, text, active, onClick }: LinkItemProps) =>
       <a 
         href={href} 
         onClick={handleClick}
-        className={`flex items-center p-2 rounded-lg hover:bg-gray-100 ${
-          active ? 'bg-[#0040FF] text-white' : 'text-gray-500 hover:bg-gray-100'
-        }`}
+        className={`flex items-center p-2 rounded-lg 
+    ${active 
+      ? 'bg-[#0040FF] text-white' 
+      : 'text-gray-500 hover:bg-gray-100'}`}
       >
         <Icon className="mr-2 h-7 w-8" />
         <span className='flex-1 me-3'>{text}</span>
