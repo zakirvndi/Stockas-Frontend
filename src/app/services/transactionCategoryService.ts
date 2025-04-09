@@ -22,6 +22,11 @@ export const createTransactionCategory = async (data: {
   type: string;
 }) => {
   const token = getToken();
+
+  if (!data.type || !data.name) {
+    throw new Error('Both Type and CategoryName are required');
+  }
+
   const response = await fetch(`${API}/api/transaction-categories`, {
     method: "POST",
     headers: {
@@ -29,8 +34,8 @@ export const createTransactionCategory = async (data: {
       Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({
-      categoryName: data.name,
-      type: data.type,
+      Type: data.type,
+      CategoryName: data.name,
     }),
   });
 
@@ -56,8 +61,8 @@ export const updateTransactionCategory = async (
       Authorization: token ? `Bearer ${token}` : '',
     },
     body: JSON.stringify({
-      categoryName: data.name,
-      type: data.type,
+      Type: data.type,
+      CategoryName: data.name,
     }),
   });
 

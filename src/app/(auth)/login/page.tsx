@@ -161,7 +161,7 @@ const LoginPage = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className={`w-full p-2 border rounded-md bg-white italic text-sm focus:outline-none text-gray-500  text-left ${
+                    className={`w-full p-2 py-3 border rounded-md bg-white italic text-sm focus:outline-none text-gray-500  text-left ${
                       passwordError ? 'border-red-500' : 'border-[#B4CCE4]'
                     }`}
                     required 
@@ -206,7 +206,7 @@ const LoginPage = () => {
       </div>
 
       {/* Mobile Login Form */}
-      <div className="md:hidden w-full">
+      <div className="md:hidden w-full items-center justify-center flex">
         <div className="w-full max-w-md bg-[#D2E8FD] p-6 rounded-lg shadow-md">
           <h2 className="text-2xl text-[#051D63] font-semibold mb-6 mt-2 text-left">Sign In</h2>
           
@@ -246,7 +246,7 @@ const LoginPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full p-2 border rounded-md bg-white italic text-sm focus:outline-none text-left ${
+                  className={`w-full p-2 py-3 border rounded-md bg-white italic text-sm focus:outline-none text-left ${
                     passwordError ? 'border-red-500' : 'border-[#B4CCE4]'
                   }`}
                   required 

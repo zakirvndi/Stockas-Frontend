@@ -56,8 +56,8 @@ export default function UpdateStockModal({
     
         if (!found) {
           await createTransactionCategory({
-            CategoryName: category.name,
-            Type: category.type,
+            name: category.name,
+            type: category.type,
           });
         }
         
