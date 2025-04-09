@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const isAuth = isAuthenticated();
         const isAuthPage = ['/login', '/register'].includes(pathname);
-        const isProtectedRoute = ['/dashboard', '/transactions', '/products']
+        const isProtectedRoute = ['/dashboard', '/transaction', '/product']
           .some(route => pathname.startsWith(route));
 
         if (!isAuth && isProtectedRoute) {

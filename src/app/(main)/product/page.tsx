@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import ProductTable from "../../../components/Product/ProductTable";
-import ProductCard from "../../../components/Product/ProductCard";
+import ProductTable from "@/components/Product/ProductTable";
+import ProductCard from "@/components/Product/ProductCard";
 import { ProductType, ProductAPIItem, ProductAPIResponse } from "../../types/product";
 import { Filter, PlusCircle, Folder } from "lucide-react";
 import { getProducts } from "@/app/services/productService";

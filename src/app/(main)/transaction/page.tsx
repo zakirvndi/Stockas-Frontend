@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import TransactionCard from "../../../components/Transaction/TransactionCard";
-import TransactionTable from "../../../components/Transaction/TransactionTable";
-import { TransactionType } from "../../types/transaction";
+import TransactionCard from "@/components/Transaction/TransactionCard";
+import TransactionTable from "@/components/Transaction/TransactionTable";
+import { TransactionType } from "@/app/types/transaction";
 import { getTransactions } from "@/app/services/transactionService";
 import { Filter, PlusCircle, Folder } from "lucide-react";
 import AddTransactionModal from "@/components/Transaction/modals/AddTransactionModal";

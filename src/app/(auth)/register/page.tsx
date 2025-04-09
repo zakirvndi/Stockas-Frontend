@@ -213,7 +213,7 @@ const RegisterPage = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-500 text-white py-3 rounded-3xl hover:bg-[#0040FF] font-semibold sm:text-base transition disabled:opacity-70"
+            className="w-full bg-blue-500 text-white py-3 rounded-3xl hover:bg-[#0040FF] font-semibold sm:text-base transition disabled:opacity-70 cursor-pointer"
           >
             {isLoading ? 'Signing Up...' : 'Sign Up'}
           </button>
