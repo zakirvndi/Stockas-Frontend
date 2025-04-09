@@ -61,7 +61,6 @@ export default function FilterModal({
             >
               <option value="">None</option>
               <option value="category">Category</option>
-              <option value="type">Type</option>
             </select>
           </div>
 
@@ -73,8 +72,10 @@ export default function FilterModal({
               className="w-full border rounded-md px-3 py-2 text-sm"
             >
               <option value="">None</option>
-              <option value="date">Date</option>
-              <option value="amount">Amount</option>
+              <option value="stock">Stock</option>
+              <option value="sellingprice">Selling Price</option>
+              <option value="buyingprice">Buying Price</option>
+              <option value="date">Input Date</option>
             </select>
           </div>
 
