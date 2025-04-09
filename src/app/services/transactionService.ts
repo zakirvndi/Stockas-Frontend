@@ -2,9 +2,20 @@ import { getToken } from "@/utils/auth";
 
 const API = "https://stockas.azurewebsites.net"; 
 
-export const getTransactions = async (page = 1, pageSize = 10) => {
+export const getTransactions = async (
+  queryOrPage: string | number = 1,
+  pageSize = 10
+) => {
   const token = getToken();
-  const response = await fetch(`${API}/api/transactions?page=${page}&pageSize=${pageSize}`, {
+  let url = `${API}/api/transactions`;
+
+  if (typeof queryOrPage === "string") {
+    url += queryOrPage;
+  } else {
+    url += `?page=${queryOrPage}&pageSize=${pageSize}`;
+  }
+
+  const response = await fetch(url, {
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
     },

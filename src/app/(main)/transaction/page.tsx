@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TransactionCard from "../../../components/Transaction/TransactionCard";
 import TransactionTable from "../../../components/Transaction/TransactionTable";
 import { TransactionType } from "../../types/transaction";
-import { getTransactions, deleteTransaction } from "@/app/services/transactionService";
+import { getTransactions } from "@/app/services/transactionService";
 import { Filter, PlusCircle, Folder } from "lucide-react";
 import AddTransactionModal from "@/components/Transaction/modals/AddTransactionModal";
 import EditTransactionModal from "@/components/Transaction/modals/EditTransactionModal";
 import { DeleteTransactionModal } from "@/components/Transaction/modals/DeleteTransactionModal";
 import CategoryModal from "@/components/Transaction/modals/CategoryModal";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import FilterModal from "@/components/Product/modals/FilterModal";
 
 export default function TransactionPage() {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
@@ -19,30 +20,41 @@ export default function TransactionPage() {
   const [isEditOpen, setEditOpen] = useState(false);
   const [isAddOpen, setAddOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [isFilterOpen, setFilterOpen] = useState(false);
   const [isCategoryOpen, setCategoryOpen] = useState(false);
+  const [isFilterOpen, setFilterOpen] = useState(false);
+  const [filter, setFilter] = useState({
+    groupBy: "",
+    orderBy: "",
+    orderDesc: false,
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
-
-  const fetchTransactions = async () => {
+  
+  const fetchTransactions = useCallback(async () => {
     try {
-      const { items, totalCount } = await getTransactions(currentPage, pageSize);
+      const params = new URLSearchParams();
+      params.append("page", currentPage.toString());
+      params.append("pageSize", pageSize.toString());
   
-      const sorted = items.sort((a :TransactionType, b:TransactionType) => (a.transactionId || 0) - (b.transactionId || 0));
-      setTransactions(sorted);
+      if (filter.groupBy) params.append("groupBy", filter.groupBy);
+      if (filter.orderBy) params.append("sortBy", filter.orderBy);
+      if (filter.orderDesc) params.append("sortDesc", "true");
   
+      const { items, totalCount } = await getTransactions("?" + params.toString());
+  
+      setTransactions(items);
       const total = Math.ceil(totalCount / pageSize);
       setTotalPages(total);
     } catch (err) {
       console.error("Error fetching transactions:", err);
       setTransactions([]);
     }
-  };
+  }, [currentPage, filter]);
 
   useEffect(() => {
     fetchTransactions();
-  }, [currentPage]);
+  }, [fetchTransactions]);
 
   const handleEdit = (tx: TransactionType) => {
     setSelectedTransaction(tx);
@@ -175,6 +187,13 @@ export default function TransactionPage() {
             onSuccess={fetchTransactions}
           />
         )} 
+
+        <FilterModal
+                  isOpen={isFilterOpen}
+                  onClose={() => setFilterOpen(false)}
+                  filter={filter}
+                  setFilter={setFilter}
+                />
       </div>
     </ProtectedRoute>
   );

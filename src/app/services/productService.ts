@@ -4,6 +4,7 @@ const API = "https://stockas.azurewebsites.net";
 
 export const getProducts = async (params = "") => {
   const token = getToken();
+  console.log(`Params: ${params}`);
   const response = await fetch(`${API}/api/products${params}`, {
     headers: {
       Authorization: token ? `Bearer ${token}` : '',

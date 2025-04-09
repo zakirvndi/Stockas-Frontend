@@ -1,39 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProductTable from "../../../components/Product/ProductTable";
 import ProductCard from "../../../components/Product/ProductCard";
-import { ProductType } from "../../types/product";
+import { ProductType, ProductAPIItem, ProductAPIResponse } from "../../types/product";
 import { Filter, PlusCircle, Folder } from "lucide-react";
-import { deleteProduct, getProducts } from "@/app/services/productService";
+import { getProducts } from "@/app/services/productService";
 import AddProductModal from "@/components/Product/modals/AddProductModal";
 import EditProductModal from "@/components/Product/modals/EditProductModal";
 import { DeleteProductModal } from "@/components/Product/modals/DeleteProductModal";
 import UpdateStockModal from "@/components/Product/modals/UpdateStockModal";
 import CategoryModal from "@/components/Product/modals/CategoryModal";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import FilterModal from "@/components/Product/modals/FilterModal";
 
 export default function ProductPage() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [search, setSearch] = useState("");
-  const [isFilterOpen, setFilterOpen] = useState(false);
   const [isCategoryOpen, setCategoryOpen] = useState(false);
   const [isAddOpen, setAddOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isUpdateStockOpen, setUpdateStockOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isFilterOpen, setFilterOpen] = useState(false);
+  const [filter, setFilter] = useState({
+    groupBy: "", 
+    orderBy: "date", 
+    orderDesc: false,
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
+  
 
   
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
-      const params = `?page=${currentPage}&pageSize=${pageSize}`;
-      const data = await getProducts(params);
+      const params = new URLSearchParams();
+      params.append("page", currentPage.toString());
+      params.append("pageSize", pageSize.toString());
   
-      const formatted = data.items.map((item: any) => ({
+      if (filter.groupBy) params.append("groupByCategory", "true");
+      if (filter.orderBy) params.append("orderBy", filter.orderBy);
+      if (filter.orderDesc) params.append("orderDesc", "true");
+  
+      const data: ProductAPIResponse = await getProducts("?" + params.toString());
+  
+      const formatted: ProductType[] = data.items.map((item: ProductAPIItem) => ({
         id: item.productId,
         name: item.productName,
         stock: item.quantity,
@@ -44,20 +58,18 @@ export default function ProductPage() {
         categoryName: item.categoryName,
       }));
   
-      const sorted = formatted.sort((a: ProductType, b: ProductType) => a.id - b.id);
-  
-      setProducts(sorted);
+      setProducts(formatted);
   
       const total = Math.ceil(data.totalCount / pageSize);
       setTotalPages(total);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
-  };
-
+  }, [currentPage, pageSize, filter]);
+  
   useEffect(() => {
     fetchProducts();
-  }, [currentPage]);
+  }, [fetchProducts]);
   
   const handleEdit = (product: ProductType) => {
     setSelectedProduct(product);
@@ -207,6 +219,13 @@ export default function ProductPage() {
             onSuccess={fetchProducts} 
           />
         )}
+
+        <FilterModal
+          isOpen={isFilterOpen}
+          onClose={() => setFilterOpen(false)}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </div>
     </ProtectedRoute>
   );
