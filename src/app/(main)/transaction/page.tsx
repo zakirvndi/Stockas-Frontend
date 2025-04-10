@@ -108,23 +108,35 @@ export default function TransactionPage() {
             </div>
           </div>
 
-          {/* Table View */}
-          <div className="hidden lg:block">
-            <TransactionTable
-              transactions={transactions}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          </div>
+          {transactions.length === 0 ? (
+            <div className="text-center py-20 text-gray-500 space-y-2">
+              <h2 className="text-lg font-semibold">No transactions found</h2>
+              <p className="text-sm">Please add a category first, then add a new transaction.</p>
+            </div>
+          ) : (
+            <>
+              {/* Table View */}
+              <div className="hidden lg:block">
+                <TransactionTable
+                  transactions={transactions}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              </div>
 
-          {/* Card View for Mobile */}
-          <div className="block lg:hidden">
-            <TransactionCard
-              transactions={transactions}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          </div>
+               {/* Card View for Mobile */}
+              <div className="block lg:hidden">
+                <TransactionCard
+                  transactions={transactions}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              </div>
+            </>
+          )}
+          
+
+         
         </main>
 
         {/* Pagination */}

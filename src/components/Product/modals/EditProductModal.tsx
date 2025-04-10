@@ -6,6 +6,7 @@ import { CategoryType } from "@/app/types/product";
 import { X } from "lucide-react";
 import { Dialog } from "@headlessui/react";
 
+
 interface EditProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,6 +27,12 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [buyingPrice, setBuyingPrice] = useState<number>(0);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [categoryError, setCategoryError] = useState("");
+  const [errors, setErrors] = useState<{
+    name? : string;
+    stock?: string;
+    buyingPrice?: string;
+    sellingPrice?: string;
+  }>({});
 
     useEffect(() => {
         if (product && categories.length > 0) {
@@ -54,33 +61,46 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     }
     }, [isOpen]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!product) return;
-
-        const updatedProduct: ProductUpdate = {
-          productId: product.id,
-          productName: name,
-          categoryId: categoryId!,
-          quantity: stock,
-          sellingPrice,
-          purchasePrice: buyingPrice,
-        };
-
-        if (!categoryId || !categories.some(cat => cat.categoryId === categoryId)) {
-            setCategoryError("Please reselect a valid category.");
-            return;
-        } else {
-            setCategoryError("");
-        }
-
-        try {
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!product) return;
+    
+      const newErrors: typeof errors = {};
+      if (name.trim() === "") newErrors.name = "Product Name must be filled.";
+      if (stock <= 0) newErrors.stock = "Stock must be more than 0.";
+      if (buyingPrice <= 0) newErrors.buyingPrice = "Buying Price must be more than 0.";
+      if (sellingPrice <= 0) newErrors.sellingPrice = "Selling Price must be more than 0.";
+    
+      if (!categoryId || !categories.some((cat) => cat.categoryId === categoryId)) {
+        setCategoryError("Please reselect a valid category.");
+        return;
+      } else {
+        setCategoryError("");
+      }
+    
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+    
+      setErrors({}); 
+    
+      const updatedProduct: ProductUpdate = {
+        productId: product.id,
+        productName: name,
+        categoryId: categoryId!,
+        quantity: stock,
+        sellingPrice,
+        purchasePrice: buyingPrice,
+      };
+    
+      try {
         await updateProduct(product.id, updatedProduct);
         onSuccess();
         onClose();
-        } catch (error) {
+      } catch (error) {
         console.error("Failed to update product", error);
-        }
+      }
     };
 
   if (!isOpen || !product) return null;
@@ -115,6 +135,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 placeholder="Enter new product name"
                 className="w-full border border-gray-300 rounded px-3 py-2 "
               />
+              {errors.name && (
+                <p className="text-sm text-red-500 mt-1">{errors.name}</p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -155,6 +178,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 placeholder="Enter new product stock"
                 className="w-full border border-gray-300 rounded px-3 py-2 "
               />
+              {errors.stock && (
+                <p className="text-sm text-red-500 mt-1">{errors.stock}</p>
+              )}
             </div>
             
             <div className="space-y-1">
@@ -167,6 +193,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 placeholder="Enter Buying Price"
                 className="w-full border border-gray-300 rounded px-3 py-2 "
               />
+              {errors.buyingPrice && (
+                <p className="text-sm text-red-500 mt-1">{errors.buyingPrice}</p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -179,6 +208,9 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 placeholder="Enter Selling Price"
                 className="w-full border border-gray-300 rounded px-3 py-2 "
               />
+              {errors.sellingPrice && (
+                <p className="text-sm text-red-500 mt-1">{errors.sellingPrice}</p>
+              )}
             </div>
 
             

@@ -126,26 +126,35 @@ export default function ProductPage() {
               </button>
             </div>
           </div>
-        
-          {/* table */}
-          <div className="hidden lg:block">
-            <ProductTable
-              products={products}
-              onEdit={handleEdit}
-              onUpdateStock={handleUpdateStock}
-              onDelete={handleDelete}
-            />
-          </div>
 
-          {/* Card*/}
-          <div className="block lg:hidden">
-            <ProductCard
-              products={products}
-              onEdit={handleEdit}
-              onUpdateStock={handleUpdateStock}
-              onDelete={handleDelete}
-            />
-          </div>
+          {products.length === 0 ? (
+            <div className="text-center py-20 text-gray-500 space-y-2">
+              <h2 className="text-lg font-semibold">No products found</h2>
+              <p className="text-sm">Please add a category first, then add a new product.</p>
+            </div>
+          ) : (
+            <>
+              {/* Table for desktop */}
+              <div className="hidden lg:block">
+                <ProductTable
+                  products={products}
+                  onEdit={handleEdit}
+                  onUpdateStock={handleUpdateStock}
+                  onDelete={handleDelete}
+                />
+              </div>
+
+              {/* Cards for mobile */}
+              <div className="block lg:hidden">
+                <ProductCard
+                  products={products}
+                  onEdit={handleEdit}
+                  onUpdateStock={handleUpdateStock}
+                  onDelete={handleDelete}
+                />
+              </div>
+            </>
+          )}
         </main>
           
         {/* Pagination */}

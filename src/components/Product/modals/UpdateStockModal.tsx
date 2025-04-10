@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ProductType } from '@/app/types/product'; 
 import { createTransaction } from '@/app/services/transactionService';
 import { createTransactionCategory, getTransactionCategories } from '@/app/services/transactionCategoryService';
-import { updateStock } from '@/app/services/productService';
+import { deleteProduct, updateStock } from '@/app/services/productService';
 import toast from 'react-hot-toast';
 import { X } from "lucide-react";
 import { TransactionCategoryType } from '@/app/types/transaction';
@@ -56,11 +56,14 @@ export default function UpdateStockModal({
         );
     
         if (!found) {
-          await createTransactionCategory({
+          const newCategory = await createTransactionCategory({
             name: category.name,
             type: category.type,
           });
+        
+          console.log("Category created:", newCategory);
         }
+
 
         console.log("Payload to transaction", payload);
         await createTransaction(payload);
@@ -70,25 +73,31 @@ export default function UpdateStockModal({
             ? product.stock - quantity
             : product.stock + quantity;
 
-        await updateStock(product.id, {
-          productId: product.id,
-          productName: product.name,
-          categoryId: product.categoryId,
-          quantity: newStock,
-          purchasePrice: product.buyingPrice,
-          sellingPrice: product.sellingPrice,
-        });
+        if (newStock === 0) {
+            await deleteProduct(product.id);
+            toast.success('Stock 0 — Product deleted!');
+        } else {
+          await updateStock(product.id, {
+            productId: product.id,
+            productName: product.name,
+            categoryId: product.categoryId,
+            quantity: newStock,
+            purchasePrice: product.buyingPrice,
+            sellingPrice: product.sellingPrice,
+          });
+            toast.success('Stock berhasil diupdate!');
+          }
     
         toast.success('Stock berhasil diupdate!');
         onClose();
         onSuccess();
       } catch (err: unknown) {
         if (err instanceof Error) {
-          console.error('Gagal update stock:', err);
-          toast.error(err.message || 'Gagal update stock');
+          console.error('Stock update failed:', err);
+          toast.error(err.message || 'Stock update failed');
         } else {
           console.error('Unknown error:', err);
-          toast.error('Gagal update stock');
+          toast.error('Stock update failed');
         }
       }finally {
         setIsSubmitting(false);
