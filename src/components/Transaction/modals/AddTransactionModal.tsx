@@ -12,32 +12,40 @@ interface AddTransactionModalProps {
 }
 
 export default function AddTransactionModal({ isOpen, onClose, onSuccess }: AddTransactionModalProps) {
-const [categoryName, setCategoryName] = useState<string>("");
+  const [categoryName, setCategoryName] = useState<string>("");
   const [categories, setCategories] = useState<TransactionCategoryType[]>([]);
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState("");
+  const [amountError, setAmountError] = useState("");
 
-    const fetchCategories = async () => {
-        try {
-            const result = await getTransactionCategories();
-        
-            setCategories(result); 
-            if (result.length > 0) setCategoryName(result[0].categoryName);
-        } catch (err) {
-            console.error("Failed to fetch transaction categories:", err);
-        }
-    };
+  const fetchCategories = async () => {
+    try {
+      const result = await getTransactionCategories();
+      setCategories(result);
+      if (result.length > 0) setCategoryName(result[0].categoryName);
+    } catch (err) {
+      console.error("Failed to fetch transaction categories:", err);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
       fetchCategories();
       setAmount(0);
       setDescription("");
+      setAmountError("");
     }
   }, [isOpen]);
 
   const handleSubmit = async () => {
-    if (!categoryName || amount <= 0) return;
+    if (!categoryName) return;
+
+    if (amount <= 0) {
+      setAmountError("Amount must be more than 0.");
+      return;
+    } else {
+      setAmountError("");
+    }
 
     const transaction = {
       categoryName,
@@ -94,8 +102,11 @@ const [categoryName, setCategoryName] = useState<string>("");
                 placeholder="Enter Transaction Amount"
                 value={amount}
                 onChange={(e) => setAmount(parseInt(e.target.value))}
-                className="w-full border border-gray-200 rounded px-3 py-2 text-gray-500"
+                className={`w-full border rounded px-3 py-2 text-gray-500 ${
+                  amountError ? "border-red-400" : "border-gray-200"
+                }`}
               />
+              {amountError && <p className="text-red-500 mt-1">{amountError}</p>}
             </div>
 
             <div className="space-y-1">

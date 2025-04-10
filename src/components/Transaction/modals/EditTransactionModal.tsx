@@ -22,12 +22,14 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     if (transaction) {
       setCategoryName(transaction.categoryName);
       setAmount(transaction.amount);
       setDescription(transaction.description ?? "");
+      setError(null); 
     }
   }, [transaction]);
 
@@ -44,6 +46,11 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!transaction) return;
+
+    if (!categoryName || amount <= 0) {
+      setError("Amount must be greater than 0");
+      return;
+    }
 
     const updatedData = {
       categoryName,
@@ -105,6 +112,9 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 placeholder="Enter transaction amount"
               />
+              {error && (
+                <p className="text-red-500 text-xs mt-1">{error}</p>
+              )}
             </div>
 
             <div>
