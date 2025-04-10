@@ -93,7 +93,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
                   </div>
                 ) : (
                   <>
-                    <p className="font-bold text-sm">{userProfile?.name || 'User'}</p>
+                    <p className="font-semibold text-sm text-black">{userProfile?.name || 'User'}</p>
                     <p className="text-xs text-gray-600 break-words">
                       {userProfile?.email || 'No email available'}
                     </p>
